@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useReducer, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 // 5. The reduceer - this is used to update the state, based on the action
@@ -27,9 +27,8 @@ export const AppReducer = (state, action) => {
 	}
 };
 
-// 1. Sets the initial state when the app loads
+// 1. Sets the initial state when the app load.
 const initialState = {
-	budget: 2000,
 	expenses: [
 		{ id: uuidv4(), name: 'Shopping', cost: 50 },
 		{ id: uuidv4(), name: 'Holiday', cost: 300 },
@@ -47,13 +46,14 @@ export const AppContext = createContext();
 export const AppProvider = (props) => {
 	// 4. Sets up the app state. takes a reducer, and an initial state
 	const [state, dispatch] = useReducer(AppReducer, initialState);
-
+	const [budget, setBudget] = useState(2000);
 	// 5. Returns our context. Pass in the values we want to expose
 	return (
 		<AppContext.Provider
 			value={{
 				expenses: state.expenses,
-				budget: state.budget,
+				budget: budget,
+				setBudget: setBudget,
 				dispatch,
 			}}
 		>
